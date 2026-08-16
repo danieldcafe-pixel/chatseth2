@@ -207,7 +207,9 @@
     border-radius:8px;
     letter-spacing:0.1px;
   }
-  #towerPhotoImg{
+  #rabbiPhotoImg{
+    position:absolute;
+    inset:0;
     width:100%; height:100%;
     object-fit:cover;
     display:block;
@@ -562,7 +564,7 @@
     const adjustDoneBtn = document.getElementById('adjustDoneBtn');
 
     let currentTarget = null;
-    let stageScale = 1.25, stageX = 0, stageY = 0;
+    let stageScale = 1, stageX = 0, stageY = 0;
     let stagePointers = new Map();
     let stageDragStart = null;
     let stagePinchStartDist = null;
@@ -591,7 +593,7 @@
         input: cfg.input,
         storageKey: cfg.storageKey,
         frameSize: cfg.frameSize,
-        scale: 1.25, x: 0, y: 0,
+        scale: 1, x: 0, y: 0,
         hasPhoto: false,
         commit: function(src, scale, x, y){
           cfg.img.src = src;
@@ -608,9 +610,9 @@
       if (saved) {
         try {
           const p = JSON.parse(saved);
-          target.commit(p.src, p.scale || 1.25, p.x || 0, p.y || 0);
+          target.commit(p.src, p.scale || 1, p.x || 0, p.y || 0);
         } catch (err) {
-          target.commit(saved, 1.25, 0, 0);
+          target.commit(saved, 1, 0, 0);
         }
       }
 
@@ -642,11 +644,11 @@
         const rect = adjustStage.getBoundingClientRect();
         if (target.hasPhoto) {
           const ratio = rect.width / target.frameSize;
-          stageScale = target.scale || 1.25;
+          stageScale = target.scale || 1;
           stageX = (target.x || 0) * ratio;
           stageY = (target.y || 0) * ratio;
         } else {
-          stageScale = 1.25; stageX = 0; stageY = 0;
+          stageScale = 1; stageX = 0; stageY = 0;
         }
         applyStageTransform();
       });
@@ -715,7 +717,7 @@
         stageDragStart = null; stagePinchStartDist = null;
         const now = Date.now();
         if (now - stageLastTap < 300) {
-          stageScale = 1.25; stageX = 0; stageY = 0;
+          stageScale = 1; stageX = 0; stageY = 0;
           applyStageTransform();
         }
         stageLastTap = now;
@@ -734,7 +736,7 @@
           adjustStageImg.src = evt.target.result;
           adjustStageImg.style.display = 'block';
           adjustEmptyHint.style.display = 'none';
-          stageScale = 1.25; stageX = 0; stageY = 0;
+          stageScale = 1; stageX = 0; stageY = 0;
           applyStageTransform();
         };
         reader.readAsDataURL(file);
