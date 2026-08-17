@@ -514,7 +514,7 @@
           <path d="M18 10.5V12.5C18 15.81 15.31 18.5 12 18.5C8.69 18.5 6 15.81 6 12.5V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           <path d="M12 18.5V21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <span class="composer-draft" id="composerInput" contenteditable="true" spellcheck="false">Thanks! As my father used to say, don't sell it, don't lend it, don't lose it.</span>
+        <span class="composer-draft" id="composerInput" contenteditable="true" spellcheck="false">Thanks! As my dad used to say, don't sell it, don't loan it, don't lose it.</span>
       </div>
       <div class="send-btn" id="sendBtn">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -799,7 +799,7 @@
     const composerInput = document.getElementById('composerInput');
     const sendBtn = document.getElementById('sendBtn');
     const draftModeToggle = document.getElementById('draftModeToggle');
-    const DEFAULT_DRAFT = "Thanks! As my father used to say, don't sell it, don't lend it, don't lose it.";
+    const DEFAULT_DRAFT = "Thanks! As my dad used to say, don't sell it, don't loan it, don't lose it.";
     const DRAFT_MODE_KEY = 'seth-rabbishlomo-draft-mode-v2';
     let draftMode = localStorage.getItem(DRAFT_MODE_KEY) || 'empty'; // 'prefilled' o 'empty'
     let pressTimer = null;
