@@ -143,6 +143,7 @@
   .row{ display:flex; margin-bottom:6px; }
   .row.in{ justify-content:flex-start; }
   .row.out{ justify-content:flex-end; }
+  .row.hidden-msg{ display:none; }
 
   .bubble{
     max-width:76%;
@@ -493,7 +494,7 @@
 
     <div class="edit-banner">
       <span>Edit mode — long-press avatar to exit</span>
-      <button type="button" id="draftModeToggle" class="draft-mode-btn">Draft: Prefilled</button>
+      <button type="button" id="draftModeToggle" class="draft-mode-btn">Seth's message: Hidden</button>
     </div>
 
     <!-- chat body -->
@@ -544,6 +545,12 @@
       <div class="row out">
         <div class="bubble sent" id="msg-3">
           <span data-editable="msg3Text">I understand. It's not yours. It's on loan from history.</span>
+        </div>
+      </div>
+
+      <div class="row in hidden-msg" id="hiddenSethRow">
+        <div class="bubble received" id="hiddenSethMsg">
+          <span data-editable="hiddenSethText">Thanks! As my dad said, don't sell it, don't loan it, don't lose it.</span>
         </div>
       </div>
 
@@ -846,15 +853,16 @@
     const composerInput = document.getElementById('composerInput');
     const sendBtn = document.getElementById('sendBtn');
     const draftModeToggle = document.getElementById('draftModeToggle');
-    const DEFAULT_DRAFT = "";
+    const hiddenSethRow = document.getElementById('hiddenSethRow');
     const DRAFT_MODE_KEY = 'seth-rabbishlomo-draft-mode-v2';
-    let draftMode = localStorage.getItem(DRAFT_MODE_KEY) || 'empty'; // 'prefilled' o 'empty'
+    let draftMode = localStorage.getItem(DRAFT_MODE_KEY) || 'empty'; // 'prefilled' (mensaje de Seth visible) o 'empty' (oculto)
     let pressTimer = null;
     let skipNextClick = false;
 
     function applyDraftMode(){
-      composerInput.textContent = draftMode === 'prefilled' ? DEFAULT_DRAFT : '';
-      draftModeToggle.textContent = draftMode === 'prefilled' ? 'Draft: Prefilled' : 'Draft: Type it live';
+      hiddenSethRow.classList.toggle('hidden-msg', draftMode !== 'prefilled');
+      draftModeToggle.textContent = draftMode === 'prefilled' ? "Seth's message: Shown" : "Seth's message: Hidden";
+      if (draftMode === 'prefilled') chatBody.scrollTop = chatBody.scrollHeight;
     }
     draftModeToggle.addEventListener('click', function(){
       draftMode = draftMode === 'prefilled' ? 'empty' : 'prefilled';
