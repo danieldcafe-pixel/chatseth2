@@ -1032,6 +1032,21 @@
         console.warn('No se pudo registrar el service worker:', err);
       });
     }
+
+    // respaldo: si el navegador no respeta el "fullscreen" del manifest
+    // (sigue mostrando la barra de estado de Android), lo pedimos a mano
+    // en el primer toque, ya que requestFullscreen necesita un gesto del usuario
+    function tryRequestFullscreen(){
+      const el = document.documentElement;
+      const isInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+                           window.matchMedia('(display-mode: fullscreen)').matches ||
+                           window.navigator.standalone === true;
+      if (isInstalled && el.requestFullscreen && !document.fullscreenElement) {
+        el.requestFullscreen().catch(function(){});
+      }
+    }
+    document.addEventListener('pointerdown', tryRequestFullscreen, { once: true });
+    tryRequestFullscreen();
   </script>
 
 </body>
