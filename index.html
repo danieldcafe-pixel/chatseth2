@@ -1023,6 +1023,15 @@
         if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
       });
     });
+
+    // registra el service worker: sin esto, Chrome/Android no ofrece
+    // "instalar" la página, solo un acceso directo que sigue abriendo
+    // con la barra del navegador visible
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(function(err){
+        console.warn('No se pudo registrar el service worker:', err);
+      });
+    }
   </script>
 
 </body>
