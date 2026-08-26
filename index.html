@@ -656,7 +656,11 @@
           if (cfg.hint) cfg.hint.style.display = 'none';
           cfg.img.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
           this.scale = scale; this.x = x; this.y = y; this.hasPhoto = true;
-          localStorage.setItem(cfg.storageKey, JSON.stringify({ src: src, scale: scale, x: x, y: y }));
+          try {
+            localStorage.setItem(cfg.storageKey, JSON.stringify({ src: src, scale: scale, x: x, y: y }));
+          } catch (err) {
+            console.warn('No se pudo guardar la foto de forma permanente:', err);
+          }
         }
       };
 
@@ -780,20 +784,48 @@
     adjustStage.addEventListener('pointerup', stageEndPointer);
     adjustStage.addEventListener('pointercancel', stageEndPointer);
 
+    // reduce el tamaño de la foto (fotos de cámara pesan varios MB y no entran en localStorage)
+    function compressImageFile(file, maxDim, quality){
+      return new Promise(function(resolve, reject){
+        const reader = new FileReader();
+        reader.onload = function(evt){
+          const img = new Image();
+          img.onload = function(){
+            let w = img.width, h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w >= h) { h = Math.round(h * (maxDim / w)); w = maxDim; }
+              else { w = Math.round(w * (maxDim / h)); h = maxDim; }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = evt.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
     // cargar la foto elegida dentro del modal (no se aplica hasta pulsar "Done")
     function wireFileInput(target){
       target.input.addEventListener('change', function(e){
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(evt){
-          adjustStageImg.src = evt.target.result;
+        function showInStage(dataUrl){
+          adjustStageImg.src = dataUrl;
           adjustStageImg.style.display = 'block';
           adjustEmptyHint.style.display = 'none';
           stageScale = 1; stageX = 0; stageY = 0;
           applyStageTransform();
-        };
-        reader.readAsDataURL(file);
+        }
+        compressImageFile(file, 1000, 0.82).then(showInStage).catch(function(){
+          const reader = new FileReader();
+          reader.onload = function(evt){ showInStage(evt.target.result); };
+          reader.readAsDataURL(file);
+        });
       });
     }
 
