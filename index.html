@@ -1072,7 +1072,10 @@
 
     // respaldo: si el navegador no respeta el "fullscreen" del manifest
     // (sigue mostrando la barra de estado de Android), lo pedimos a mano
-    // en el primer toque, ya que requestFullscreen necesita un gesto del usuario
+    // en cada toque, ya que requestFullscreen necesita un gesto del usuario.
+    // No usamos { once: true }: Android saca la página de fullscreen al
+    // enfocar el input de mensaje (para mostrar el teclado), así que hay
+    // que volver a pedirlo en cada toque, no solo en el primero.
     function tryRequestFullscreen(){
       const el = document.documentElement;
       const isInstalled = window.matchMedia('(display-mode: standalone)').matches ||
@@ -1082,7 +1085,7 @@
         el.requestFullscreen().catch(function(){});
       }
     }
-    document.addEventListener('pointerdown', tryRequestFullscreen, { once: true });
+    document.addEventListener('pointerdown', tryRequestFullscreen);
     tryRequestFullscreen();
   </script>
 
