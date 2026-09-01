@@ -672,7 +672,11 @@
           cfg.img.style.display = 'block';
           if (cfg.placeholder) cfg.placeholder.style.display = 'none';
           if (cfg.hint) cfg.hint.style.display = 'none';
-          cfg.img.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
+          // pequeño sobre-escalado (no visible) para evitar que Android deje
+          // un hairline del fondo del marco asomando en un borde al recortar
+          // una imagen con transform dentro de un contenedor redondeado
+          const renderScale = scale * 1.03;
+          cfg.img.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + renderScale + ')';
           this.scale = scale; this.x = x; this.y = y; this.hasPhoto = true;
           try {
             localStorage.setItem(cfg.storageKey, JSON.stringify({ src: src, scale: scale, x: x, y: y }));
