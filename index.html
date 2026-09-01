@@ -1087,6 +1087,22 @@
     }
     document.addEventListener('pointerdown', tryRequestFullscreen);
     tryRequestFullscreen();
+
+    // el toque en el input abre el teclado, y Android suele salir de
+    // fullscreen recién cuando termina la animación del teclado (después
+    // de que ya corrió tryRequestFullscreen en el pointerdown), así que
+    // reintentamos un par de veces más tras enfocar el campo de mensaje
+    if (composerInput) {
+      composerInput.addEventListener('focus', function(){
+        setTimeout(tryRequestFullscreen, 250);
+        setTimeout(tryRequestFullscreen, 600);
+      });
+    }
+    document.addEventListener('fullscreenchange', function(){
+      if (!document.fullscreenElement) {
+        setTimeout(tryRequestFullscreen, 50);
+      }
+    });
   </script>
 
 </body>
