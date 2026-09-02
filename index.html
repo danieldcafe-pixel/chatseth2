@@ -1074,6 +1074,23 @@
       });
     }
 
+    // evita que la pantalla se apague/bloquee sola mientras la app está
+    // abierta. El wake lock se libera solo cuando la pestaña pasa a
+    // segundo plano, así que hay que volver a pedirlo al regresar.
+    let wakeLock = null;
+    async function requestWakeLock(){
+      if (!('wakeLock' in navigator)) return;
+      try {
+        wakeLock = await navigator.wakeLock.request('screen');
+      } catch (err) {
+        console.warn('No se pudo mantener la pantalla encendida:', err);
+      }
+    }
+    requestWakeLock();
+    document.addEventListener('visibilitychange', function(){
+      if (document.visibilityState === 'visible') requestWakeLock();
+    });
+
     // respaldo: si el navegador no respeta el "fullscreen" del manifest
     // (sigue mostrando la barra de estado de Android), lo pedimos a mano
     // en cada toque, ya que requestFullscreen necesita un gesto del usuario.
