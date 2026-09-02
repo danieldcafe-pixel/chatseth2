@@ -1024,14 +1024,8 @@
       btn.className = 'emoji-item';
       btn.textContent = emoji;
       btn.addEventListener('click', function(){
+        // sin .focus(): así no se abre el teclado solo por tocar un emoji
         composerInput.textContent += emoji;
-        composerInput.focus();
-        const range = document.createRange();
-        range.selectNodeContents(composerInput);
-        range.collapse(false);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
       });
       emojiGrid.appendChild(btn);
     });
