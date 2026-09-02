@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Chat — Seth (v2)</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1C2B33">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Chat">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
@@ -16,6 +16,9 @@
     --bg-chat: #EFEAE1;
     --header: #1C2B33;
     --header-text: #F4F1EA;
+    --chat-header-bg: #FFFFFF;
+    --chat-header-text: #22262B;
+    --chat-header-border: #E1DCD1;
     --sent: #3E6259;
     --sent-text: #F4F1EA;
     --received: #FFFFFF;
@@ -68,7 +71,8 @@
   .chat-header{
     position:relative;
     z-index:2;
-    background:var(--header);
+    background:var(--chat-header-bg);
+    border-bottom:1px solid var(--chat-header-border);
     flex-shrink:0;
     display:flex;
     align-items:center;
@@ -78,7 +82,7 @@
   .back-arrow{
     width:26px; height:26px;
     display:flex; align-items:center; justify-content:center;
-    color:var(--header-text);
+    color:var(--chat-header-text);
   }
   .back-arrow svg{ width:13px; height:22px; }
 
@@ -105,7 +109,7 @@
 
   .header-id{ flex:1; min-width:0; }
   .header-name{
-    color:var(--header-text);
+    color:var(--chat-header-text);
     font-size:16.5px;
     font-weight:600;
     white-space:nowrap;
@@ -120,7 +124,7 @@
   }
 
   .header-actions{ display:flex; align-items:center; gap:20px; padding-right:4px; }
-  .header-actions svg{ width:21px; height:21px; color:var(--header-text); }
+  .header-actions svg{ width:21px; height:21px; color:var(--chat-header-text); }
 
   /* ---------- chat body ---------- */
   .chat-body{
@@ -477,7 +481,7 @@
     <div class="chat-header">
       <div class="back-arrow" id="backArrow">
         <svg viewBox="0 0 13 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11.5 1L1.5 11L11.5 21" stroke="#F4F1EA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11.5 1L1.5 11L11.5 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
       <div class="avatar" id="avatarFrame">
